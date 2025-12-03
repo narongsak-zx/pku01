@@ -177,7 +177,7 @@
 
         // --- COMPONENTS ---
 
-        const Navbar = ({ setPage, logoUrl, schoolName, pages, mainMenus }) => {
+        const Navbar = ({ setPage, logoUrl, schoolName, schoolNameEN, pages, mainMenus }) => {
             const [activeDropdown, setActiveDropdown] = useState(null);
 
             const sortedMenus = mainMenus ? [...mainMenus]
@@ -216,7 +216,7 @@
                             <img src={logoUrl || 'https://via.placeholder.com/150?text=Logo'} className="w-14 h-14 md:w-16 md:h-16 object-contain" onError={(e)=>e.target.style.display='none'} />
                             <div className="flex flex-col justify-center">
                                 <h1 className="text-xl md:text-2xl font-bold text-primary leading-none whitespace-nowrap">{schoolName}</h1>
-                                <p className="text-sm text-gray-500 font-medium tracking-wide mt-1 whitespace-nowrap">Phukhamkrutmaneeuthit School</p>
+                                <p className="text-sm text-gray-500 font-medium tracking-wide mt-1 whitespace-nowrap">{schoolNameEN || 'Phukhamkrutmaneeuthit School'}</p>
                             </div>
                         </div>
                         <div className="flex gap-5 lg:gap-6 items-center h-full ml-auto"> 
@@ -412,8 +412,8 @@
             </div>
         );
 
-        // --- NEW FOOTER COMPONENT ---
-        const Footer = ({ schoolName, schoolAddress, schoolPhone, fbName, fbUrl, logoUrl, onAdminClick }) => {
+        // --- FOOTER COMPONENT ---
+        const Footer = ({ schoolName, schoolNameEN, schoolAddress, schoolPhone, fbName, fbUrl, logoUrl, onAdminClick }) => {
             return (
                 <footer className="bg-primary text-white pt-16 pb-8 mt-auto">
                     <div className="content-container">
@@ -424,7 +424,7 @@
                                     <img src={logoUrl} className="w-14 h-14 bg-white rounded-full p-1 object-contain" onError={(e)=>e.target.style.display='none'}/>
                                     <div>
                                         <h3 className="font-bold text-xl leading-tight">{schoolName}</h3>
-                                        <p className="text-blue-300 text-sm">Phukhamkrutmaneeuthit School</p>
+                                        <p className="text-blue-300 text-sm">{schoolNameEN || 'Phukhamkrutmaneeuthit School'}</p>
                                     </div>
                                 </div>
                                 <ul className="space-y-4 text-blue-100">
@@ -490,6 +490,7 @@
             const [settingsForm, setSettingsForm] = useState({ 
                 SchoolLogo: '', 
                 SchoolName: '',
+                SchoolNameEN: '', // Added English Name
                 SchoolAddress: '',
                 SchoolPhone: '', 
                 FacebookName: '',
@@ -525,6 +526,7 @@
                     const updates = [
                         { Key: 'SchoolLogo', Value: settingsForm.SchoolLogo },
                         { Key: 'SchoolName', Value: settingsForm.SchoolName },
+                        { Key: 'SchoolNameEN', Value: settingsForm.SchoolNameEN }, // Added to update
                         { Key: 'SchoolAddress', Value: settingsForm.SchoolAddress },
                         { Key: 'SchoolPhone', Value: settingsForm.SchoolPhone },
                         { Key: 'FacebookName', Value: settingsForm.FacebookName },
@@ -566,6 +568,7 @@
                 setSettingsForm({ 
                     SchoolLogo: getConfig('SchoolLogo'), 
                     SchoolName: getConfig('SchoolName'),
+                    SchoolNameEN: getConfig('SchoolNameEN'), // Load EN Name
                     SchoolAddress: getConfig('SchoolAddress'),
                     SchoolPhone: getConfig('SchoolPhone'),
                     FacebookName: getConfig('FacebookName'),
@@ -642,9 +645,10 @@
                                         <form onSubmit={handleSave} className="grid gap-5">
                                             {tab === 'Settings' && <>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div><label className="text-sm font-bold text-gray-600 mb-1 block">ชื่อโรงเรียน</label><input className="w-full border p-3 rounded-lg" value={settingsForm.SchoolName} onChange={e=>setSettingsForm({...settingsForm, SchoolName: e.target.value})} /></div>
-                                                    <div><label className="text-sm font-bold text-gray-600 mb-1 block">เบอร์โทรศัพท์</label><input className="w-full border p-3 rounded-lg" value={settingsForm.SchoolPhone} onChange={e=>setSettingsForm({...settingsForm, SchoolPhone: e.target.value})} placeholder="เช่น 056-792781" /></div>
+                                                    <div><label className="text-sm font-bold text-gray-600 mb-1 block">ชื่อโรงเรียน (TH)</label><input className="w-full border p-3 rounded-lg" value={settingsForm.SchoolName} onChange={e=>setSettingsForm({...settingsForm, SchoolName: e.target.value})} /></div>
+                                                    <div><label className="text-sm font-bold text-gray-600 mb-1 block">ชื่อโรงเรียน (EN)</label><input className="w-full border p-3 rounded-lg" value={settingsForm.SchoolNameEN} onChange={e=>setSettingsForm({...settingsForm, SchoolNameEN: e.target.value})} placeholder="Phukhamkrutmaneeuthit School" /></div>
                                                 </div>
+                                                <div><label className="text-sm font-bold text-gray-600 mb-1 block">เบอร์โทรศัพท์</label><input className="w-full border p-3 rounded-lg" value={settingsForm.SchoolPhone} onChange={e=>setSettingsForm({...settingsForm, SchoolPhone: e.target.value})} placeholder="เช่น 056-792781" /></div>
                                                 <div><label className="text-sm font-bold text-gray-600 mb-1 block">ที่อยู่</label><textarea rows="3" className="w-full border p-3 rounded-lg" value={settingsForm.SchoolAddress} onChange={e=>setSettingsForm({...settingsForm, SchoolAddress: e.target.value})} placeholder="ใส่ที่อยู่โรงเรียน..."></textarea></div>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     <div><label className="text-sm font-bold text-gray-600 mb-1 block">ชื่อ Facebook</label><input className="w-full border p-3 rounded-lg" value={settingsForm.FacebookName} onChange={e=>setSettingsForm({...settingsForm, FacebookName: e.target.value})} placeholder="เช่น โรงเรียนพุขาม..." /></div>
@@ -761,6 +765,7 @@
             const getConfig = (key) => data.Config?.find(c => c.Key === key)?.Value || '';
             const logoUrl = getConfig('SchoolLogo');
             const schoolName = getConfig('SchoolName') || 'โรงเรียนพุขามครุฑมณีอุทิศ';
+            const schoolNameEN = getConfig('SchoolNameEN');
             const schoolAddress = getConfig('SchoolAddress');
             const schoolPhone = getConfig('SchoolPhone') || '056-792781';
             const fbName = getConfig('FacebookName');
@@ -777,7 +782,7 @@
                 <div className="min-h-screen flex flex-col font-sarabun bg-slate-50 relative w-full">
                     {isAdmin ? <AdminPanel data={data} reload={load} onLogout={handleLogout} onClose={()=>handleLogout()} /> : (
                         <>
-                            <Navbar setPage={setPage} logoUrl={logoUrl} schoolName={schoolName} pages={data.Pages} mainMenus={data.Menus} />
+                            <Navbar setPage={setPage} logoUrl={logoUrl} schoolName={schoolName} schoolNameEN={schoolNameEN} pages={data.Pages} mainMenus={data.Menus} />
                             <main className="flex-grow w-full bg-white">
                                 {page.id === 'home' && (
                                     <>
@@ -826,6 +831,7 @@
                             
                             <Footer 
                                 schoolName={schoolName}
+                                schoolNameEN={schoolNameEN}
                                 schoolAddress={schoolAddress}
                                 schoolPhone={schoolPhone}
                                 fbName={fbName}
