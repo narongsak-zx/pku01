@@ -54,12 +54,14 @@
             cursor: pointer;
             transition: color 0.2s;
             white-space: nowrap;
-            /* ปรับขนาด Font ให้ Dynamic */
-            font-size: 14px; 
+            /* --- ปรับขนาด Font ให้ใหญ่ขึ้น --- */
+            font-size: 16px; /* เดิม 14px */
             user-select: none;
         }
         @media (min-width: 1440px) {
-            .nav-link { font-size: 16px; }
+            .nav-link { 
+                font-size: 18px; /* เดิม 16px */
+            }
         }
 
         .nav-link:hover, .group:hover .nav-link { color: #004993; }
@@ -247,8 +249,7 @@
                         {/* --- ZONE 2: MAIN MENU (AUTO SPACING ADJUSTED) --- */}
                         <div className="flex flex-col items-end justify-center gap-1 h-full flex-1 min-w-0"> 
                             {menuRows.map((row, rowIndex) => {
-                                // NEW LOGIC: 
-                                // ถ้าครบ 7 รายการ (เต็มแถว) -> กระจายตัว (justify-between)
+                                // ถ้าครบ 7 รายการ -> กระจายตัว (justify-between)
                                 // ถ้าน้อยกว่า 7 รายการ -> ชิดซ้าย (justify-start)
                                 const isFullRow = row.length === 7;
                                 const justifyClass = isFullRow ? 'justify-between' : 'justify-start gap-6 lg:gap-8';
@@ -259,8 +260,6 @@
                                             const sub = m.Type === 'dropdown' ? getSubMenu(m.ID) : [];
                                             const isOpen = activeDropdown === m.ID; 
                                             
-                                            // ถ้าแถวเต็ม 7 อัน, 2 อันขวาสุดให้ Dropdown เด้งไปทางซ้าย (ชิดขวาจอ)
-                                            // ถ้าแถวไม่เต็ม (ชิดซ้าย) ให้เด้งปกติ
                                             const isRightAligned = isFullRow && i >= row.length - 2;
 
                                             return (
