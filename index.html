@@ -82,6 +82,13 @@
             transform-origin: top left;
         }
 
+        /* Class สำหรับเมนูที่อยู่ด้านขวา ให้ Dropdown ชิดขวา */
+        .dropdown-right {
+            left: auto !important;
+            right: 0 !important;
+            transform-origin: top right !important;
+        }
+
         .dropdown-visible {
             display: block !important;
             animation: modernSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -223,6 +230,8 @@
                             {sortedMenus.map((m, i) => {
                                 const sub = m.Type === 'dropdown' ? getSubMenu(m.ID) : [];
                                 const isOpen = activeDropdown === m.ID; 
+                                // เช็คว่าเป็น 2 เมนูสุดท้ายหรือไม่ ถ้าใช่ให้ Align Right
+                                const isRightAligned = i >= sortedMenus.length - 2;
 
                                 return (
                                     <div key={i} className="relative group h-full flex items-center px-1 cursor-pointer select-none">
@@ -233,7 +242,7 @@
                                             )}
                                         </span>
                                         {m.Type === 'dropdown' && sub.length > 0 && (
-                                            <div className={`dropdown-menu ${isOpen ? 'dropdown-visible' : ''}`}>
+                                            <div className={`dropdown-menu ${isOpen ? 'dropdown-visible' : ''} ${isRightAligned ? 'dropdown-right' : ''}`}>
                                                 <div className="flex flex-col gap-1">
                                                     {sub.map(s => (
                                                         <div 
