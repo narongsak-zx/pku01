@@ -180,7 +180,6 @@
         const Navbar = ({ setPage, logoUrl, schoolName, pages, mainMenus }) => {
             const [activeDropdown, setActiveDropdown] = useState(null);
 
-            // Filter out 'contact' from main menu
             const sortedMenus = mainMenus ? [...mainMenus]
                 .filter(m => m.ID !== 'contact') 
                 .sort((a,b) => Number(a.Order||0) - Number(b.Order||0)) : [];
@@ -464,10 +463,18 @@
                             </div>
                         </div>
 
-                        <div className="border-t border-blue-800/50 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-blue-300">
-                            <p>&copy; {new Date().getFullYear()} {schoolName}. All Rights Reserved.</p>
-                            <div onClick={onAdminClick} className="text-blue-500 hover:text-white cursor-pointer transition-colors inline-flex items-center gap-1.5 px-3 py-1 hover:bg-white/10 rounded-full">
-                                <i className="fas fa-lock text-[10px]"></i> <span>Admin Login</span>
+                        {/* Bottom Bar: Copyright Centered, Settings Icon Right */}
+                        <div className="border-t border-blue-800/50 pt-8 relative flex flex-col md:flex-row items-center justify-center">
+                            <p className="text-sm text-blue-300 text-center">
+                                &copy; 2025 {schoolName}. All Rights Reserved.
+                            </p>
+                            
+                            <div 
+                                onClick={onAdminClick} 
+                                className="mt-4 md:mt-0 md:absolute md:right-0 text-blue-400 hover:text-white cursor-pointer transition-all hover:rotate-90 duration-500 p-2"
+                                title="เข้าสู่ระบบผู้ดูแลระบบ"
+                            >
+                                <i className="fas fa-cog text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -839,4 +846,5 @@
     </script>
 </body>
 </html>
+
 
