@@ -245,13 +245,13 @@
                         </div>
 
                         {/* --- ZONE 2: MAIN MENU (AUTO SPACING ADJUSTED) --- */}
-                        {/* ใช้ flex-1 เพื่อให้กินพื้นที่ที่เหลือทั้งหมด และ w-full เพื่อคำนวณระยะห่าง */}
                         <div className="flex flex-col items-end justify-center gap-1 h-full flex-1 min-w-0"> 
                             {menuRows.map((row, rowIndex) => {
-                                // เช็คว่าแถวนี้คนเยอะไหม ถ้าเยอะ (เช่นเกิน 4) ให้กระจาย (justify-between)
-                                // ถ้าน้อย (เช่นแถวสุดท้ายมี 2 อัน) ให้ชิดซ้าย (justify-start) เพื่อความสวยงาม
-                                const isCrowdedRow = row.length > 4;
-                                const justifyClass = isCrowdedRow ? 'justify-between' : 'justify-start gap-6 lg:gap-8';
+                                // NEW LOGIC: 
+                                // ถ้าครบ 7 รายการ (เต็มแถว) -> กระจายตัว (justify-between)
+                                // ถ้าน้อยกว่า 7 รายการ -> ชิดซ้าย (justify-start)
+                                const isFullRow = row.length === 7;
+                                const justifyClass = isFullRow ? 'justify-between' : 'justify-start gap-6 lg:gap-8';
 
                                 return (
                                     <div key={rowIndex} className={`flex ${justifyClass} items-center w-full`}>
@@ -259,7 +259,9 @@
                                             const sub = m.Type === 'dropdown' ? getSubMenu(m.ID) : [];
                                             const isOpen = activeDropdown === m.ID; 
                                             
-                                            const isRightAligned = row.length > 4 && i >= row.length - 2;
+                                            // ถ้าแถวเต็ม 7 อัน, 2 อันขวาสุดให้ Dropdown เด้งไปทางซ้าย (ชิดขวาจอ)
+                                            // ถ้าแถวไม่เต็ม (ชิดซ้าย) ให้เด้งปกติ
+                                            const isRightAligned = isFullRow && i >= row.length - 2;
 
                                             return (
                                                 <div key={m.ID} className="relative group h-full flex items-center px-1 cursor-pointer select-none">
@@ -893,4 +895,5 @@
     </script>
 </body>
 </html>
+
 
